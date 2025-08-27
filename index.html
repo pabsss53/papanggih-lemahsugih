@@ -171,6 +171,9 @@
 
     const listContainer = document.getElementById("namaList");
 
+    //by Alphabet
+    namaPeserta.sort((a, b) => a.nama.localeCompare(b.nama, 'id'));
+
     // Generate list
     namaPeserta.forEach((item, index) => {
       const li = document.createElement("li");
