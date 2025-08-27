@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAPANGGIH LEMAHSUGIH - Pengumuman Tim KKN</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Montserrat:wght@400;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to bottom, #eef3d0, #a9c3a4, #8a774b, #343419);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      background: url('public/herobg.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.07;
+      top: 0; left: 0; bottom: 0; right: 0;
+      position: absolute;
+      z-index: 0;
+    }
+
+    .title-img {
+      width: 60%;
+      max-width: 1320px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      animation: fadeInDown 1.5s ease;
+    }
+
+    header { text-align: center; padding: 2rem; z-index: 2; position: relative; animation: fadeInDown 1.5s ease; }
+    header h2 { font-size: 1.2rem; font-weight: 400; color: #3B3B1A; margin-top: 0.5rem; }
+
+    main {
+      background: #606034;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      z-index: 2;
+      position: relative;
+      width: 90%; max-width: 600px;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    h3 { font-family: 'Cinzel', serif; text-align: center; margin-bottom: 1.5rem; color: #eef3d0; }
+
+    ul { list-style: none; }
+    ul li {
+      background: #eef3d0;
+      margin: 0.5rem 0;
+      padding: 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      color: #343419;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    ul li:hover {
+      transform: translateY(-3px) scale(1.01);
+      background: #D4D4AC;
+    }
+    ul li::before {
+      content: "✦"; position: absolute; left: -20px; top: 20px;
+      transform: translateY(-50%); font-size: 1.2rem; color: #ffeb8a;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+
+    .kategori {
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: #343419;
+      color: #eef3d0;
+    }
+
+    /* Detail info expand */
+    .detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.3s ease;
+      font-size: 0.9rem;
+      color: #222;
+      background: rgba(255,255,255,0.4);
+      margin-top: 0.8rem;
+      border-radius: 10px;
+      padding: 0 1rem;
+    }
+    .detail p { margin: 0.4rem 0; }
+    .expanded .detail {
+      max-height: 300px; /* cukup besar untuk isi */
+      padding: 0.8rem 1rem;
+    }
+
+    footer { margin-top: auto; text-align: center; padding: 1rem; font-size: 0.9rem; color: #ddd; z-index: 2; position: relative; }
+
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-40px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes twinkle { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+    @keyframes float { from { transform: translateY(100vh) rotate(0deg);} to { transform: translateY(-100vh) rotate(360deg);} }
+
+    .flower {
+      position: absolute; width: 40px; height: 40px;
+      background: url('./public/batikterbang.png') no-repeat center/contain;
+      opacity: 0.3; animation: float 20s linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="./public/title.png" alt="PAPANGGIH LEMAHSUGIH" class="title-img">
+    <h2>Pengumuman Tim KKN - UGM 2025</h2>
+  </header>
+
+  <main>
+    <h3>Daftar Peserta yang Lolos Seleksi Berkas</h3>
+    <ul id="namaList"></ul>
+  </main>
+
+  <footer>&copy; 2025 PAPANGGIH LEMAHSUGIH - UGM</footer>
+
+  <script>
+  // ==== DATA PESERTA ====
+  const namaPeserta = [
+    { nama: "Adam Amirul Akbari", kategori: "Saintek", fakultas: "Geografi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
+    { nama: "Syahlum Chantika Andriani", kategori: "Saintek", fakultas: "Teknik", devisi1: "Bendahara", devisi2: "Perlengkapan dan Logistik" },
+    { nama: "Ade Riyana Pangestika", kategori: "Saintek", fakultas: "FMIPA", devisi1: "Perlengkapan dan Logistik", devisi2: "Sekretaris" },
+    { nama: "Sherryn", kategori: "Saintek", fakultas: "Teknik", devisi1: "Humas dan Publikasi", devisi2: "Sekretaris" },
+    { nama: "Faqiha Izzatunnisa Nugrahati", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Sekretaris", devisi2: "Sekretaris" },
+    { nama: "Lalu Kevin Alejandro Mandrayudha", kategori: "Saintek", fakultas: "Sekolah Vokasi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
+    { nama: "Fikri Mahendra Putra", kategori: "Saintek", fakultas: "Geografi", devisi1: "Humas dan Publikasi", devisi2: "Perlengkapan dan Logistik" },
+    { nama: "Andhika Moses William Darmayana", kategori: "Saintek", fakultas: "Teknik", devisi1: "Sekretaris", devisi2: "Bendahara" },
+    { nama: "Riva Olyvia", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Humas dan Publikasi", devisi2: "Sponsorship" },
+    { nama: "Wafi Afdi Alfaruqhi", kategori: "Saintek", fakultas: "Teknik", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
+    { nama: "Dayang Mustika Balqis", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Humas dan Publikasi", devisi2: "Humas dan Publikasi" },
+    { nama: "Nurwahidatin nisa", kategori: "Agro", fakultas: "Kehutanan", devisi1: "Humas dan Publikasi", devisi2: "Humas dan Publikasi" },
+    { nama: "Belinda Putri Astrelita Gea", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Humas dan Publikasi", devisi2: "Sponsorship" },
+    { nama: "Rachelia Rahma", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Sponsorship", devisi2: "Humas dan Publikasi" },
+    { nama: "Madarina Shabrina", kategori: "Saintek", fakultas: "Teknik", devisi1: "Bendahara", devisi2: "Perlengkapan dan Logistik" },
+    { nama: "Ryan Taufiqurrochman", kategori: "Saintek", fakultas: "Sekolah Vokasi", devisi1: "Humas dan Publikasi", devisi2: "Sekretaris" },
+    { nama: "Adinda Aurora Fatimah Soeryono", kategori: "Saintek", fakultas: "Geografi", devisi1: "Perlengkapan dan Logistik", devisi2: "Akomodasi dan Transportasi" },
+    { nama: "Nadia Amalia Putri", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Akomodasi dan Transportasi", devisi2: "Humas dan Publikasi" },
+    { nama: "Yakub Kartiko Utomo", kategori: "Saintek", fakultas: "Geografi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
+    { nama: "Victory Kamilio Hadi", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
+    { nama: "Callysta Meisya Athari", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Akomodasi dan Transportasi", devisi2: "Humas dan Publikasi" },
+    { nama: "Idris Abdurrahman", kategori: "Agro", fakultas: "Peternakan", devisi1: "Akomodasi dan Transportasi", devisi2: "Akomodasi dan Transportasi" },
+    { nama: "Azlika Dinda Ramadhania", kategori: "Soshum", fakultas: "Sekolah Vokasi", devisi1: "Humas dan Publikasi", devisi2: "Humas dan Publikasi" },
+    { nama: "Kornelius Cesar Risnanda Putra", kategori: "Saintek", fakultas: "Teknik", devisi1: "Sponsorship", devisi2: "Perlengkapan dan Logistik" },
+     { nama: "Vemi Rahmayani", kategori: "Saintek", fakultas: "MIPA", devisi1: "Humas dan Publikasi", devisi2: "Sponsorship" },
+    { nama: "Kayla Aura Sakinadhia Irstiadi", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Perlengkapan dan Logistik", devisi2: "Sponsorship" },
+    { nama: "Mulky Djati Sabila", kategori: "Saintek", fakultas: "Geografi", devisi1: "Humas dan Publikasi", devisi2: "Perlengkapan dan Logistik" },
+    { nama: "Dita F.A", kategori: "Saintek", fakultas: "Teknik", devisi1: "Sekretaris", devisi2: "Desain, Dokumentasi, Editing" },
+  ];
+
+    const listContainer = document.getElementById("namaList");
+
+    // Generate list
+    namaPeserta.forEach((item, index) => {
+      const li = document.createElement("li");
+
+      const spanNama = document.createElement("span");
+      spanNama.textContent = item.nama;
+
+      const spanKategori = document.createElement("span");
+      spanKategori.textContent = item.kategori;
+      spanKategori.classList.add("kategori");
+
+      // detail container
+      const detail = document.createElement("div");
+      detail.classList.add("detail");
+      detail.innerHTML = `
+        <p><b>Fakultas:</b> ${item.fakultas}</p>
+        <p><b>Divisi Pilihan 1:</b> ${item.devisi1}</p>
+        <p><b>Divisi Pilihan 2:</b> ${item.devisi2}</p>
+      `;
+
+      const headerDiv = document.createElement("div");
+      headerDiv.style.display = "flex";
+      headerDiv.style.justifyContent = "space-between";
+      headerDiv.style.alignItems = "center";
+      headerDiv.appendChild(spanNama);
+      headerDiv.appendChild(spanKategori);
+
+      li.appendChild(headerDiv);
+      li.appendChild(detail);
+
+      li.style.animation = `fadeInUp 1s ease ${(index+1) * 0.2}s both`;
+
+      // Klik expand/collapse (hanya 1 terbuka sekaligus)
+      li.addEventListener("click", () => {
+        document.querySelectorAll("#namaList li").forEach(otherLi => {
+          if (otherLi !== li) {
+            otherLi.classList.remove("expanded");
+          }
+        });
+        li.classList.toggle("expanded");
+      });
+
+      listContainer.appendChild(li);
+    });
+
+    // Background ornamen
+    for (let i = 0; i < 10; i++) {
+      const flower = document.createElement("div");
+      flower.classList.add("flower");
+      flower.style.left = Math.random() * 100 + "vw";
+      flower.style.animationDuration = 10 + Math.random() * 20 + "s";
+      flower.style.animationDelay = Math.random() * 10 + "s";
+      document.body.appendChild(flower);
+    }
+  </script>
+</body>
+</html>
