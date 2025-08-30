@@ -6,7 +6,6 @@
   <title>PAPANGGIH LEMAHSUGIH - Pengumuman Tim KKN</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Montserrat:wght@400;600&display=swap');
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
@@ -24,12 +23,56 @@
 
     body::before {
       content: "";
-      background: url('/assets/herobg.jpg') no-repeat center center;
+      background: url('./assets/herobg.jpg') no-repeat center center;
       background-size: cover;
-      opacity: 0.07;
+      opacity: 0.1;
       top: 0; left: 0; bottom: 0; right: 0;
       position: absolute;
       z-index: 0;
+    }
+
+    /* Opening overlay */
+    #opening {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to bottom, #eef3d0, #a9c3a4, #8a774b, #343419);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      cursor: pointer;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+    #opening::before {
+      content: "";
+      background: url('./assets/herobg.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.03;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+    }
+    #opening img {
+      width: 70%;
+      max-width: 900px;
+      animation: fadeInDown 1.5s ease;
+      z-index: 2;
+      position: relative;
+    }
+    #opening h2 {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      animation: fadeInUp 1.5s ease;
+      z-index: 2;
+      position: relative;
+    }
+    #opening.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .title-img {
@@ -52,11 +95,13 @@
       backdrop-filter: blur(5px);
       z-index: 2;
       position: relative;
-      width: 90%; max-width: 600px;
+      width: 90%; max-width: 700px;
       animation: fadeInUp 1.5s ease;
+      display: none; /* sembunyikan dulu */
     }
 
     h3 { font-family: 'Cinzel', serif; text-align: center; margin-bottom: 1.5rem; color: #eef3d0; }
+    h4 { margin-top: 1.5rem; margin-bottom: 0.5rem; font-family:'Cinzel',serif; color:#ffeb8a; }
 
     ul { list-style: none; }
     ul li {
@@ -90,7 +135,6 @@
       color: #eef3d0;
     }
 
-    /* Detail info expand */
     .detail {
       max-height: 0;
       overflow: hidden;
@@ -104,7 +148,7 @@
     }
     .detail p { margin: 0.4rem 0; }
     .expanded .detail {
-      max-height: 300px; /* cukup besar untuk isi */
+      max-height: 200px;
       padding: 0.8rem 1rem;
     }
 
@@ -117,66 +161,86 @@
 
     .flower {
       position: absolute; width: 40px; height: 40px;
-      background: url('/assets/batikterbang.png') no-repeat center/contain;
+      background: url('./assets/batikterbang.png') no-repeat center/contain;
       opacity: 0.3; animation: float 20s linear infinite;
     }
   </style>
 </head>
 <body>
+  <!-- Opening screen -->
+  <div id="opening">
+    <img src="./assets/title.png" alt="PAPANGGIH LEMAHSUGIH">
+    <h2>Klik untuk membuka pengumuman</h2>
+  </div>
+
   <header>
-    <img src="/assets/title.png" alt="PAPANGGIH LEMAHSUGIH" class="title-img">
+    <img src="./assets/title.png" alt="PAPANGGIH LEMAHSUGIH" class="title-img">
     <h2>Pengumuman Tim KKN - UGM 2025</h2>
   </header>
 
   <main>
-    <h3>Daftar Peserta yang Lolos Seleksi Berkas</h3>
-    <ul id="namaList"></ul>
+    <h3>Daftar Peserta yang Lolos Seleksi</h3>
+    <div id="listDivisi"></div>
   </main>
 
   <footer>&copy; 2025 PAPANGGIH LEMAHSUGIH - UGM</footer>
 
   <script>
-  // ==== DATA PESERTA ====
-  const namaPeserta = [
-    { nama: "Adam Amirul Akbari", kategori: "Saintek", fakultas: "Geografi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
-    { nama: "Syahlum Chantika Andriani", kategori: "Saintek", fakultas: "Teknik", devisi1: "Bendahara", devisi2: "Perlengkapan dan Logistik" },
-    { nama: "Ade Riyana Pangestika", kategori: "Saintek", fakultas: "FMIPA", devisi1: "Perlengkapan dan Logistik", devisi2: "Sekretaris" },
-    { nama: "Sherryn", kategori: "Saintek", fakultas: "Teknik", devisi1: "Humas dan Publikasi", devisi2: "Sekretaris" },
-    { nama: "Faqiha Izzatunnisa Nugrahati", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Sekretaris", devisi2: "Sekretaris" },
-    { nama: "Lalu Kevin Alejandro Mandrayudha", kategori: "Saintek", fakultas: "Sekolah Vokasi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
-    { nama: "Fikri Mahendra Putra", kategori: "Saintek", fakultas: "Geografi", devisi1: "Humas dan Publikasi", devisi2: "Perlengkapan dan Logistik" },
-    { nama: "Andhika Moses William Darmayana", kategori: "Saintek", fakultas: "Teknik", devisi1: "Sekretaris", devisi2: "Bendahara" },
-    { nama: "Riva Olyvia", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Humas dan Publikasi", devisi2: "Sponsorship" },
-    { nama: "Wafi Afdi Alfaruqhi", kategori: "Saintek", fakultas: "Teknik", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
-    { nama: "Dayang Mustika Balqis", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Humas dan Publikasi", devisi2: "Humas dan Publikasi" },
-    { nama: "Nurwahidatin nisa", kategori: "Agro", fakultas: "Kehutanan", devisi1: "Humas dan Publikasi", devisi2: "Humas dan Publikasi" },
-    { nama: "Belinda Putri Astrelita Gea", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Humas dan Publikasi", devisi2: "Sponsorship" },
-    { nama: "Rachelia Rahma", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Sponsorship", devisi2: "Humas dan Publikasi" },
-    { nama: "Madarina Shabrina", kategori: "Saintek", fakultas: "Teknik", devisi1: "Bendahara", devisi2: "Perlengkapan dan Logistik" },
-    { nama: "Ryan Taufiqurrochman", kategori: "Saintek", fakultas: "Sekolah Vokasi", devisi1: "Humas dan Publikasi", devisi2: "Sekretaris" },
-    { nama: "Adinda Aurora Fatimah Soeryono", kategori: "Saintek", fakultas: "Geografi", devisi1: "Perlengkapan dan Logistik", devisi2: "Akomodasi dan Transportasi" },
-    { nama: "Nadia Amalia Putri", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Akomodasi dan Transportasi", devisi2: "Humas dan Publikasi" },
-    { nama: "Yakub Kartiko Utomo", kategori: "Saintek", fakultas: "Geografi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
-    { nama: "Victory Kamilio Hadi", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Perlengkapan dan Logistik", devisi2: "Humas dan Publikasi" },
-    { nama: "Callysta Meisya Athari", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Akomodasi dan Transportasi", devisi2: "Humas dan Publikasi" },
-    { nama: "Idris Abdurrahman", kategori: "Agro", fakultas: "Peternakan", devisi1: "Akomodasi dan Transportasi", devisi2: "Akomodasi dan Transportasi" },
-    { nama: "Azlika Dinda Ramadhania", kategori: "Soshum", fakultas: "Sekolah Vokasi", devisi1: "Humas dan Publikasi", devisi2: "Humas dan Publikasi" },
-    { nama: "Kornelius Cesar Risnanda Putra", kategori: "Saintek", fakultas: "Teknik", devisi1: "Sponsorship", devisi2: "Perlengkapan dan Logistik" },
-     { nama: "Vemi Rahmayani", kategori: "Saintek", fakultas: "MIPA", devisi1: "Humas dan Publikasi", devisi2: "Sponsorship" },
-    { nama: "Kayla Aura Sakinadhia Irstiadi", kategori: "Soshum", fakultas: "Psikologi", devisi1: "Perlengkapan dan Logistik", devisi2: "Sponsorship" },
-    { nama: "Mulky Djati Sabila", kategori: "Saintek", fakultas: "Geografi", devisi1: "Humas dan Publikasi", devisi2: "Perlengkapan dan Logistik" },
-    { nama: "Dita F.A", kategori: "Saintek", fakultas: "Teknik", devisi1: "Sekretaris", devisi2: "Desain, Dokumentasi, Editing" },
-    { nama: "Ahmad Fathur Rizqi", kategori: "Agro", fakultas: "Peternakan", devisi1: "Perlengkapan dan Logistik", devisi2: "Akomodasi dan Transportasi" },
+  // klik untuk buka list
+  const opening = document.getElementById("opening");
+  const main = document.querySelector("main");
+  opening.addEventListener("click", () => {
+    opening.classList.add("hidden");
+    setTimeout(() => { main.style.display = "block"; }, 1000);
+  });
+
+  // ==== data + render (sama kaya sebelumnya) ====
+  const data = [
+    {nama:"Fatia Rahmalia Nurhidayat", kategori:"Saintek", fakultas:"Geografi", prodi:"Kartografi dan Penginderaan Jauh", divisi:"Kormasit"},
+    {nama:"Daniel Valerie", kategori:"Saintek", fakultas:"Geografi", prodi:"Kartografi dan Penginderaan Jauh", divisi:"Kormasit"},
+    {nama:"Sherryn", kategori:"Saintek", fakultas:"Teknik", prodi:"Teknik Fisika", divisi:"Sekretaris"},
+    {nama:"Rachelia Rahma", kategori:"Soshum", fakultas:"Psikologi", prodi:"Psikologi", divisi:"Bendahara"},
+    {nama:"Astry Maharani", kategori:"Saintek", fakultas:"Geografi", prodi:"Kartografi dan Penginderaan Jauh", divisi:"Humas Publikasi"},
+    {nama:"Belinda Putri", kategori:"Soshum", fakultas:"Psikologi", prodi:"Psikologi", divisi:"Humas Publikasi"},
+    {nama:"Nurwahidatin nisa", kategori:"Agro", fakultas:"Kehutanan", prodi:"Kehutanan", divisi:"Humas Publikasi"},
+    {nama:"Riva Olyvia", kategori:"Soshum", fakultas:"Psikologi", prodi:"Psikologi", divisi:"Humas Publikasi"},
+    {nama:"Much Faisal Hamid", kategori:"Saintek", fakultas:"Teknik", prodi:"Teknik Fisika", divisi:"Akomodasi Transportasi"},
+    {nama:"Nadia Amalia", kategori:"Soshum", fakultas:"Psikologi", prodi:"Psikologi", divisi:"Akomodasi Transportasi"},
+    {nama:"Idris Abdurrahman", kategori:"Agro", fakultas:"Peternakan", prodi:"Ilmu dan Industri Peternakan", divisi:"Perlengkapan Logistik"},
+    {nama:"Wafi Afdi Alfaruqhi", kategori:"Saintek", fakultas:"Teknik", prodi:"Teknologi Informasi", divisi:"Perlengkapan Logistik"},
+    {nama:"Lalu Kevin Alejandro Mandrayudha", kategori:"Saintek", fakultas:"Sekolah Vokasi", prodi:"Teknologi Rekayasa Elektro", divisi:"Perlengkapan Logistik"},
+    {nama:"Kayla Aura Sakinadhia Irstiadi", kategori:"Soshum", fakultas:"Psikologi", prodi:"Psikologi", divisi:"Perlengkapan Logistik"},
+    {nama:"Adam Amirul Akbari", kategori:"Saintek", fakultas:"Geografi", prodi:"Kartografi dan Penginderaan Jauh", divisi:"Perlengkapan Logistik"},
+    {nama:"Vanda Hapsari Nur Ramadhani", kategori:"Agro", fakultas:"Kehutanan", prodi:"Kehutanan", divisi:"Sponsorship"},
+    {nama:"Wulan Emilia", kategori:"Agro", fakultas:"Kehutanan", prodi:"Kehutanan", divisi:"Sponsorship"},
+    {nama:"Kornelius Cesar Risnanda Putra", kategori:"Saintek", fakultas:"Teknik", prodi:"Perencanaan Wilayah dan Kota", divisi:"Sponsorship"},
+    {nama:"Najwa Mandaliffa Prayoga", kategori:"Soshum", fakultas:"Fisipol", prodi:"Sosiologi", divisi:"Sponsorship"},
+    {nama:"Adyatma Damarjati Amarhathany", kategori:"Saintek", fakultas:"Geografi", prodi:"Kartografi dan Penginderaan Jauh", divisi:"DDD"},
+    {nama:"Azlika Dinda Ramadhania", kategori:"Soshum", fakultas:"Sekolah Vokasi", prodi:"Bahasa Inggris", divisi:"DDD"},
+    {nama:"Ryan Taufiqurrochman", kategori:"Saintek", fakultas:"Sekolah Vokasi", prodi:"Teknik Pengelolaan dan Perawatan Alat Berat", divisi:"DDD"},
+    {nama:"Adinda Aurora Fatimah Soeryono", kategori:"Saintek", fakultas:"Geografi", prodi:"Kartografi dan Penginderaan Jauh", divisi:"DDD"},
   ];
 
-    const listContainer = document.getElementById("namaList");
+  const container = document.getElementById("listDivisi");
+  const grouped = {};
+  data.forEach(item => {
+    if(!grouped[item.divisi]) grouped[item.divisi] = [];
+    grouped[item.divisi].push(item);
+  });
 
-    //by Alphabet
-    namaPeserta.sort((a, b) => a.nama.localeCompare(b.nama, 'id'));
+  Object.keys(grouped).forEach(divisi => {
+    const h4 = document.createElement("h4");
+    h4.textContent = divisi;
+    container.appendChild(h4);
 
-    // Generate list
-    namaPeserta.forEach((item, index) => {
+    const ul = document.createElement("ul");
+    grouped[divisi].forEach((item,index) => {
       const li = document.createElement("li");
+
+      const headerDiv = document.createElement("div");
+      headerDiv.style.display = "flex";
+      headerDiv.style.justifyContent = "space-between";
+      headerDiv.style.alignItems = "center";
 
       const spanNama = document.createElement("span");
       spanNama.textContent = item.nama;
@@ -185,49 +249,41 @@
       spanKategori.textContent = item.kategori;
       spanKategori.classList.add("kategori");
 
-      // detail container
+      headerDiv.appendChild(spanNama);
+      headerDiv.appendChild(spanKategori);
+
       const detail = document.createElement("div");
       detail.classList.add("detail");
       detail.innerHTML = `
         <p><b>Fakultas:</b> ${item.fakultas}</p>
-        <p><b>Divisi Pilihan 1:</b> ${item.devisi1}</p>
-        <p><b>Divisi Pilihan 2:</b> ${item.devisi2}</p>
+        <p><b>Prodi:</b> ${item.prodi}</p>
       `;
-
-      const headerDiv = document.createElement("div");
-      headerDiv.style.display = "flex";
-      headerDiv.style.justifyContent = "space-between";
-      headerDiv.style.alignItems = "center";
-      headerDiv.appendChild(spanNama);
-      headerDiv.appendChild(spanKategori);
 
       li.appendChild(headerDiv);
       li.appendChild(detail);
+      li.style.animation = `fadeInUp 1s ease ${(index+1)*0.2}s both`;
 
-      li.style.animation = `fadeInUp 1s ease ${(index+1) * 0.2}s both`;
-
-      // Klik expand/collapse (hanya 1 terbuka sekaligus)
       li.addEventListener("click", () => {
-        document.querySelectorAll("#namaList li").forEach(otherLi => {
-          if (otherLi !== li) {
-            otherLi.classList.remove("expanded");
-          }
+        document.querySelectorAll("#listDivisi li").forEach(other => {
+          if(other!==li) other.classList.remove("expanded");
         });
         li.classList.toggle("expanded");
       });
 
-      listContainer.appendChild(li);
+      ul.appendChild(li);
     });
+    container.appendChild(ul);
+  });
 
-    // Background ornamen
-    for (let i = 0; i < 10; i++) {
-      const flower = document.createElement("div");
-      flower.classList.add("flower");
-      flower.style.left = Math.random() * 100 + "vw";
-      flower.style.animationDuration = 10 + Math.random() * 20 + "s";
-      flower.style.animationDelay = Math.random() * 10 + "s";
-      document.body.appendChild(flower);
-    }
+  // background ornament
+  for (let i = 0; i < 10; i++) {
+    const flower = document.createElement("div");
+    flower.classList.add("flower");
+    flower.style.left = Math.random() * 100 + "vw";
+    flower.style.animationDuration = 10 + Math.random() * 20 + "s";
+    flower.style.animationDelay = Math.random() * 10 + "s";
+    document.body.appendChild(flower);
+  }
   </script>
 </body>
 </html>
